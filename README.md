@@ -1,240 +1,48 @@
- HTML FILE */
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <div id="weather-container">
-        <h2>Weather App</h2>
-        <input type="text" id="city" placeholder="Enter city">
-        <button onclick="getWeather()">Search</button>
-
-        <img id="weather-icon" alt="Weather Icon">
-
-        <div id="temp-div"></div>
-
-        <div id="weather-info"></div>
-
-        <div id="hourly-forecast"></div>
-    </div>
-    <!-- <script src="./script.js"></script> -->
-</body>
-</html>
+Name: PREETHI R
+Company: CODTECH IT SOLUTIONS
+ID: CT04WD2181
+Domain: WEB DEVELOPMENT
+Duration:15th JUNE- 15th JULY
 
 
+overview
+
+weather Forecast app
 
 
+Introduction
 
+A weather forecasting app provides users with real-time weather information, forecasts, and alerts. The application leverages weather data from various sources to offer accurate and timely weather updates, helping users plan their activities accordingly.
 
-
-/* CSS FILE */
-
-body {
-    background: #8C52FF;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-}
-
-#weather-container {
-    background: rgba(255, 255, 255, 0.3);
-    max-width: 400px;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-}
-
-h2, label, p {
-    color: #fff;
-    margin: 8px 0;
-}
-
-input {
-    width: calc(100% - 16px);
-    padding: 8px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: 1px solid white;
-    margin-top: 20px;
-}
-
-button {
-    background: #debff4;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 100px;
-    font-size: 15px;
-}
-
-button:hover {
-    background: #8b48d7;
-}
-
-#temp-div p {
-    font-size: 60px;
-    margin-top: -30px;
-}
-
-#weather-info {
-    font-size: 20px;
-}
-
-#weather-icon {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 10px; 
-    margin-bottom: 0;
-    display: none;
-}
-
-#hourly-forecast {
-    margin-top: 50px;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: flex;
-    justify-content: space-between;
-}
-
-.hourly-item {
-    flex: 0 0 auto;
-    width: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
-    color: white;
-}
-
-.hourly-item img {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 5px;
-}
-
-#hourly-heading {
-    color: #fff;
-    margin-top: 10px;
-}
-
-
-
-
-
-
-
-/* JS FILE */
-
-function getWeather() {
-    const apiKey = 'YOUR-API-KEY';
-    const city = document.getElementById('city').value;
-
-    if (!city) {
-        alert('Please enter a city');
-        return;
-    }
-
-    const currentWeatherUrl = https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey};
-    const forecastUrl = https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey};
-
-    fetch(currentWeatherUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayWeather(data);
-        })
-        .catch(error => {
-            console.error('Error fetching current weather data:', error);
-            alert('Error fetching current weather data. Please try again.');
-        });
-
-    fetch(forecastUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayHourlyForecast(data.list);
-        })
-        .catch(error => {
-            console.error('Error fetching hourly forecast data:', error);
-            alert('Error fetching hourly forecast data. Please try again.');
-        });
-}
-
-function displayWeather(data) {
-    const tempDivInfo = document.getElementById('temp-div');
-    const weatherInfoDiv = document.getElementById('weather-info');
-    const weatherIcon = document.getElementById('weather-icon');
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
-
-    // Clear previous content
-    weatherInfoDiv.innerHTML = '';
-    hourlyForecastDiv.innerHTML = '';
-    tempDivInfo.innerHTML = '';
-
-    if (data.cod === '404') {
-        weatherInfoDiv.innerHTML = <p>${data.message}</p>;
-    } else {
-        const cityName = data.name;
-        const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-        const description = data.weather[0].description;
-        const iconCode = data.weather[0].icon;
-        const iconUrl = https://openweathermap.org/img/wn/${iconCode}@4x.png;
-
-        const temperatureHTML = `
-            <p>${temperature}°C</p>
-        `;
-
-        const weatherHtml = `
-            <p>${cityName}</p>
-            <p>${description}</p>
-        `;
-
-        tempDivInfo.innerHTML = temperatureHTML;
-        weatherInfoDiv.innerHTML = weatherHtml;
-        weatherIcon.src = iconUrl;
-        weatherIcon.alt = description;
-
-        showImage();
-    }
-}
-
-function displayHourlyForecast(hourlyData) {
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
-
-    const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
-
-    next24Hours.forEach(item => {
-        const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-        const hour = dateTime.getHours();
-        const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-        const iconCode = item.weather[0].icon;
-        const iconUrl = https://openweathermap.org/img/wn/${iconCode}.png;
-
-        const hourlyItemHtml = `
-            <div class="hourly-item">
-                <span>${hour}:00</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
-            </div>
-        `;
-
-        hourlyForecastDiv.innerHTML += hourlyItemHtml;
-    });
-}
-
-function showImage() {
-    const weatherIcon = document.getElementById('weather-icon');
-    weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
-}
+Core Features
+Real-Time Weather Data
+Current Weather: Display current temperature, humidity, wind speed, and other relevant data.
+Weather Conditions: Provide information on weather conditions such as sunny, cloudy, rainy, or snowy.
+Forecasting
+Hourly Forecast: Show weather predictions for the next 24 hours.
+Daily Forecast: Provide weather forecasts for the next 7 to 14 days.
+Extended Forecast: Optionally, provide long-term forecasts up to a month.
+Weather Alerts and Notifications
+Severe Weather Alerts: Notify users about severe weather conditions such as storms, hurricanes, or tornadoes.
+Daily Weather Notifications: Send daily updates on the expected weather conditions.
+ Location-Based Services
+Auto Location Detection: Automatically detect the user’s location to provide local weather information.
+Multiple Locations: Allow users to add and track weather for multiple locations.
+Advanced Features
+ Customization
+Themes: Allow users to choose between different themes for the app interface.
+Widgets: Provide customizable home screen widgets for quick weather updates.
+ Integration
+Calendar Integration: Sync weather forecasts with the user’s calendar.
+Smart Home Integration: Integrate with smart home devices to provide weather-related updates and actions.
+ Data Analytics
+Weather Trends: Show historical weather data and trends over time.
+User Analytics: Track user interactions and preferences to improve the app’s functionality.
+Technologies Used
+ Front-end
+React Native/Flutter: For building a cross-platform mobile application.
+HTML/CSS/JavaScript: For web versions of the app.
+Back-end
+Node.js/Express: For server-side logic and API development.
+Django/Flask: As an alternative backend framework.
+Database: MongoDB, MySQL, or PostgreSQL for storing user data and preferences
